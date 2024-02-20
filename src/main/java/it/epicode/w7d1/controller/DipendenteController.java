@@ -13,6 +13,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,7 @@ public class DipendenteController {
     private Cloudinary cloudinary;
 
     @GetMapping("")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<CustomResponse> getAll(Pageable pageable){
 
         try{
@@ -115,5 +117,12 @@ public class DipendenteController {
         }
     }
 
+
+    @PatchMapping("/{username}")
+    public Dipendente changeRole(@PathVariable String username, @RequestBody String role){
+
+        return dipendenteService.updateRoleDipendente(username, role);
+
+    }
 
 }
